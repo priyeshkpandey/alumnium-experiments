@@ -1,12 +1,5 @@
-import os
 from pytest import fixture
 from alumnium import Model
-
-
-
-
-
-
 
 @fixture(autouse=True)
 def login(al, execute_script, navigate):

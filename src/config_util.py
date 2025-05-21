@@ -1,6 +1,7 @@
+import os
 import yaml
 
-TEST_CONFIG_FILE = "config/test_conf.yaml"
+TEST_CONFIG_FILE = os.getcwd() + "/config/test_conf.yaml"
 
 def get_config(config_file):
     with open(config_file) as config_f:

@@ -8,13 +8,16 @@ from alumnium import Alumni
 
 from src.config_util import get_test_config
 
-@fixture(autouse=True)
-def init_test():
+@fixture(scope="session", autouse=True)
+def api_key():
+    print("Executing init_test...")
     test_config = get_test_config()
-    os.environ["OPENAI_API_KEY"] = test_config['OPENAI_API_KEY']
+    return test_config['OPENAI_API_KEY']
+
 
 @fixture(scope="session", autouse=True)
-def driver():
+def driver(api_key):
+    os.environ["OPENAI_API_KEY"] = api_key
     driver = os.getenv("ALUMNIUM_DRIVER", "selenium")
     if driver == "playwright":
         with sync_playwright() as playwright:
