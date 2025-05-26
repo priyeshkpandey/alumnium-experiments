@@ -1,3 +1,5 @@
 test_conf.yaml
 .idea/*
 */__pycache__/*
+*.sqlite
+.DS_Store

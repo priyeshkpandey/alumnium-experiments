@@ -68,13 +68,20 @@ def pytest_runtest_makereport(item):
     report = outcome.get_result()
     extras = getattr(report, "extras", [])
     if report.when == "call":
+        # Add screenshot and URL to the report
         driver = item.funcargs["driver"]
         if isinstance(driver, Chrome):
-            driver.save_screenshot(f"reports/screenshot-{timestamp}.png")
+            driver.save_screenshot(f"/tmp/reports/screenshot-{timestamp}.png")
             url = driver.current_url
         elif isinstance(driver, Page):
-            driver.screenshot(path=f"reports/screenshot-{timestamp}.png")
+            driver.screenshot(path=f"/tmp/reports/screenshot-{timestamp}.png")
             url = driver.url
         extras.append(pytest_html.extras.image(f"screenshot-{timestamp}.png"))
         extras.append(pytest_html.extras.url(url))
         report.extras = extras
+        # Process Alumnium cache
+        al = item.funcargs["al"]
+        if report.passed:
+            al.cache.save()
+        else:
+            al.cache.discard()

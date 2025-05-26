@@ -16,6 +16,32 @@ def login(al, execute_script, navigate):
 
     al.planner_agent.prompt_with_examples.examples.clear()
 
+def test_product_sorting(al):
+    products = {
+        "Sauce Labs Backpack": 29.99,
+        "Sauce Labs Bike Light": 9.99,
+        "Sauce Labs Bolt T-Shirt": 15.99,
+        "Sauce Labs Fleece Jacket": 49.99,
+        "Sauce Labs Onesie": 7.99,
+        "Test.allTheThings() T-Shirt (Red)": 15.99,
+    }
+    titles = list(products.keys())
+    prices = list(products.values())
+
+    # Default order is A-Z
+    assert al.get("titles of products") == sorted(titles)
+
+    al.do("sort products in descending alphabetical order")
+    assert al.get("titles of products") == sorted(titles, reverse=True)
+
+    al.do("sort products in ascending alphabetical order")
+    assert al.get("titles of products") == sorted(titles)
+
+    al.do("sort products by lowest price")
+    assert al.get("prices of products") == sorted(prices)
+
+    al.do("sort products by highest price")
+    assert al.get("prices of products") == sorted(prices, reverse=True)
 
 def test_add_to_cart_checkout(al):
     al.do("add onesie to cart")
